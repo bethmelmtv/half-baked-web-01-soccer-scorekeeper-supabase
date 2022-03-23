@@ -21,21 +21,32 @@ const teamTwoLabel = document.getElementById('team-two-name');
 
 checkAuth();
 
+
+
 let name1 = '';
 let name2 = '';
 let score1 = 0;
 let score2 = 0;
 
+
+
 nameForm.addEventListener('submit', (e) => {
-    // don't forget to prevent the default form behavior!
+    e.preventDefault();
+     // get the name data from the form
+    const formData = new FormData(nameForm);
 
     // get the name data from the form
+    const nameInputOne = formData.get('team-one');
+    const nameInputTwo = formData.get('team-two');
 
-    // set the state to this data from the form
+ // set the state to this data from the form
+    name1 = nameInputOne;
+    name2 = nameInputTwo;
 
     // reset the form values
+    nameForm.reset();
 
-    displayCurrentGameEl()
+    displayCurrentGameEl();
 });
 
 
