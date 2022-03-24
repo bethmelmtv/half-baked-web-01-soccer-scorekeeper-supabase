@@ -4,6 +4,7 @@ import {
     getGames,
     createGame,
 } from '../fetch-utils.js';
+
 import { renderGame } from '../render-utils.js';
 
 const currentGameEl = document.getElementById('current-game-container');
@@ -50,29 +51,35 @@ nameForm.addEventListener('submit', (e) => {
 });
 
 
+
+
 teamOneAddButton.addEventListener('click', () => {
     // increment the current state for team one's score
-    
-    displayCurrentGameEl()
+    score1++;
+    displayCurrentGameEl();
 });
 
 teamTwoAddButton.addEventListener('click', () => {
     // increment the current state for team two's score
-
-    displayCurrentGameEl()
+    score2++;
+    displayCurrentGameEl();
 });
 
 teamOneSubtractButton.addEventListener('click', () => {
     // decrement the current state for team one's score
+    score1--;
 
-    displayCurrentGameEl()
+    displayCurrentGameEl();
 });
 
 teamTwoSubtractButton.addEventListener('click', () => {
     // decrement the current state for team two's score
-
-    displayCurrentGameEl()
+    score2--;
+    displayCurrentGameEl();
 });
+
+
+
 
 finishGameButton.addEventListener('click', async() => {
     // create a new game using the current game state
@@ -87,36 +94,58 @@ finishGameButton.addEventListener('click', async() => {
     displayCurrentGameEl();
 });
 
+
+
 logoutButton.addEventListener('click', () => {
     logout();
 });
 
+
+
+
  // on load . . .
-window.addEventListener('', async() => {
+window.addEventListener('load', async() => {
     // display all past games (hint: call displayAllGames())
+    displayAllGames();
 });
 
 
 function displayCurrentGameEl() {
     // clear out the current game div
-
+    currentGameEl.textContent = '';
     // change the label to show team one's name;
     // change the label to show team two's name;
+    teamOneLabel.textContent = name1;
+    teamTwoLabel.textContent = name2; 
 
+    const newGame = {
+        name1: name1, 
+        name2: name2,
+        score1: score1,
+        score2: score2,
+        //first name1 is referring from the table, second name1 is referring to 
+    };
     // call the render game function to create a game element
-    
+    const gameEl = renderGame(newGame);
     // append the element to the cleared out current game div
+    currentGameEl.append(gameEl);
 }
 
 
-function displayAllGames() {
-    // clear out the past games list in the DOM
-    
-    // FETCH ALL GAMES from supabase
 
+async function displayAllGames() {
+    // clear out the past games list in the DOM
+    pastGamesEl.textContent = '';
+    // FETCH ALL GAMES from supabase
+    const pastGamesArray = await getGames();
     // loop through the past games 
+    console.log(pastGamesArray);
+    for (let x of pastGamesArray) {
+        const pastGameEl = renderGame(x);
+        pastGamesEl.append(pastGameEl);
+    }
+    return pastGamesEl;
     // render and append a past game for each past game in state
 }
-
-
+displayAllGames();
 displayCurrentGameEl();

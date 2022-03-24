@@ -31,6 +31,7 @@ export async function getGames() {
     const response = await client
         .from('games')
         .select('*');
+    console.log(response);
     return checkError(response);    
 }
 
